@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour {
 
     Vector2 mousePosition;
 
+    Vector2 posicionClick;
+
 
 	// Use this for initialization
 	void Start () {
@@ -21,9 +23,9 @@ public class PlayerController : MonoBehaviour {
 
         mueveTeclas();
 
-        sigueRaton();
+        //sigueRaton();
 
-        //sigueClicks();
+        sigueClicks();
 
 	}
 
@@ -41,11 +43,16 @@ public class PlayerController : MonoBehaviour {
         transform.position = Vector2.MoveTowards(transform.position, posicion, fuerza * Time.deltaTime);
     }
 
-    /*void sigueClicks () 
+    void sigueClicks () 
     {
         if (Input.GetMouseButton(0))
         {
-            sigueRaton();
+            mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            posicionClick = mousePosition;
         }
-    }*/
+
+        Vector2 posicion = new Vector2(mousePosition.x, transform.position.y);
+        transform.position = Vector2.MoveTowards(transform.position, posicion, fuerza * Time.deltaTime);
+
+    }
 }
