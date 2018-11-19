@@ -8,19 +8,41 @@ public class PlayerController : MonoBehaviour {
 
     float fuerza = 10;
 
+    Vector2 mousePosition;
+
+
 	// Use this for initialization
 	void Start () {
         player = GetComponent<Rigidbody2D> ();
+
+        mousePosition = transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
+        mueveTeclas();
+
+        sigueRaton();
+
+	}
+
+    void mueveTeclas() 
+    {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
         player.velocity = new Vector2(h, v) * fuerza;
+    }
 
+    void sigueRaton() 
+    {
+        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 posicion = new Vector2(mousePosition.x, transform.position.y);
+        transform.position = Vector2.MoveTowards(transform.position, posicion, fuerza * Time.deltaTime);
+    }
 
-
-	}
+    void sigueClicks () 
+    {
+        
+    }
 }
