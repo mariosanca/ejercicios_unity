@@ -13,9 +13,7 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        player = GetComponent<Rigidbody2D> ();
-
-        mousePosition = transform.position;
+        player = GetComponent<Rigidbody2D>();
 	}
 	
 	// Update is called once per frame
@@ -24,6 +22,8 @@ public class PlayerController : MonoBehaviour {
         mueveTeclas();
 
         sigueRaton();
+
+        //sigueClicks();
 
 	}
 
@@ -41,8 +41,11 @@ public class PlayerController : MonoBehaviour {
         transform.position = Vector2.MoveTowards(transform.position, posicion, fuerza * Time.deltaTime);
     }
 
-    void sigueClicks () 
+    /*void sigueClicks () 
     {
-        
-    }
+        if (Input.GetMouseButton(0))
+        {
+            sigueRaton();
+        }
+    }*/
 }
