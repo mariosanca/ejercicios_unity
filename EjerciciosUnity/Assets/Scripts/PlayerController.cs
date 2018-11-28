@@ -12,28 +12,32 @@ public class PlayerController : MonoBehaviour {
 
     Vector2 posicionClick;
 
+    bool dentro;
+    Transform magnet;
+    float radio = 5f;
 
 	// Use this for initialization
 	void Start () {
         player = GetComponent<Rigidbody2D>();
+
+     
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-        mueveTeclas();
+        //mueveTeclas();
 
         //sigueRaton();
 
         sigueClicks();
 
-	}
+    }
 
     void mueveTeclas() 
     {
         float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
-        player.velocity = new Vector2(h, v) * fuerza;
+        player.velocity = new Vector2(h, 0) * fuerza;
     }
 
     void sigueRaton() 
@@ -55,4 +59,22 @@ public class PlayerController : MonoBehaviour {
         transform.position = Vector2.MoveTowards(transform.position, posicion, fuerza * Time.deltaTime);
 
     }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "magnetico")
+        {
+            cogeMagnet(col.transform);
+        }
+    }
+
+    void cogeMagnet (Transform trMagnet)
+    {
+        trMagnet.parent = transform;
+
+        trMagnet.GetComponent<Rigidbody2D>();
+        
+    }
+
 }
+
