@@ -4,23 +4,30 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+
+    //Cosas para mover al player
     Rigidbody2D player;
+    float fuerza = 10f;
 
-    float fuerza = 10;
-
+    Transform posicionPlayer;
     Vector2 mousePosition;
-
     Vector2 posicionClick;
 
+    //Cosas para atraer los imanes
+    Rigidbody2D rbIman;
+    Transform trIman;
+
+
     bool dentro;
-    Transform magnet;
+    
     float radio = 5f;
 
 	// Use this for initialization
 	void Start () {
+
         player = GetComponent<Rigidbody2D>();
 
-     
+        posicionPlayer = GetComponent<Transform>();
 	}
 	
 	// Update is called once per frame
@@ -34,20 +41,40 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    void mueveTeclas() 
+    
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "magnetico")
+        {
+            rbIman = col.gameObject.GetComponent<Rigidbody2D>();
+            rbIman.simulated = false;
+
+            trIman = col.gameObject.GetComponent<Transform>();
+            trIman.parent = transform;
+
+
+        }
+    }
+
+
+
+    void mueveTeclas()
     {
         float h = Input.GetAxis("Horizontal");
-        player.velocity = new Vector2(h, 0) * fuerza;
+        player.velocity = new Vector2(h * fuerza, player.velocity.y);
     }
 
-    void sigueRaton() 
+
+    void sigueRaton()
     {
         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 posicion = new Vector2(mousePosition.x, transform.position.y);
-        transform.position = Vector2.MoveTowards(transform.position, posicion, fuerza * Time.deltaTime);
+        mousePosition.y = 0;
+        posicionPlayer.position = mousePosition;
     }
 
-    void sigueClicks () 
+
+    void sigueClicks()
     {
         if (Input.GetMouseButton(0))
         {
@@ -60,21 +87,6 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    void OnCollisionEnter2D(Collision2D col)
-    {
-        if (col.gameObject.tag == "magnetico")
-        {
-            cogeMagnet(col.transform);
-        }
-    }
-
-    void cogeMagnet (Transform trMagnet)
-    {
-        trMagnet.parent = transform;
-
-        trMagnet.GetComponent<Rigidbody2D>();
-        
-    }
 
 }
 
