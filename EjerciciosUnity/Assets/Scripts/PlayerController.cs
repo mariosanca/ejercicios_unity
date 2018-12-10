@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
@@ -14,13 +15,13 @@ public class PlayerController : MonoBehaviour {
     Vector2 posicionClick;
 
     //Cosas para atraer los imanes
-    Rigidbody2D rbIman;
+
     Transform trIman;
+    public List<GameObject> imanes;
 
+    //Cosas para la UIIIIIII
 
-    bool dentro;
-    
-    float radio = 5f;
+    public Text textoImanes;
 
 	// Use this for initialization
 	void Start () {
@@ -28,16 +29,23 @@ public class PlayerController : MonoBehaviour {
         player = GetComponent<Rigidbody2D>();
 
         posicionPlayer = GetComponent<Transform>();
+
+        textoImanes.text = imanes.Count.ToString();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-        //mueveTeclas();
+        MueveTeclas();
 
-        //sigueRaton();
+        //SigueRaton();
 
-        sigueClicks();
+        //SigueClicks();
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Disparar();
+        }
 
     }
 
@@ -47,26 +55,31 @@ public class PlayerController : MonoBehaviour {
     {
         if (col.gameObject.tag == "magnetico")
         {
-            rbIman = col.gameObject.GetComponent<Rigidbody2D>();
+            Rigidbody2D rbIman = col.gameObject.GetComponent<Rigidbody2D>();
             rbIman.simulated = false;
 
             trIman = col.gameObject.GetComponent<Transform>();
             trIman.parent = transform;
 
+            
+            GameObject nuevoIman = col.gameObject;
+            imanes.Add(nuevoIman);
 
+            textoImanes.text = imanes.Count.ToString();
+            
         }
     }
 
 
 
-    void mueveTeclas()
+    void MueveTeclas()
     {
         float h = Input.GetAxis("Horizontal");
         player.velocity = new Vector2(h * fuerza, player.velocity.y);
     }
 
 
-    void sigueRaton()
+    void SigueRaton()
     {
         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.y = 0;
@@ -74,7 +87,7 @@ public class PlayerController : MonoBehaviour {
     }
 
 
-    void sigueClicks()
+    void SigueClicks()
     {
         if (Input.GetMouseButton(0))
         {
@@ -87,6 +100,19 @@ public class PlayerController : MonoBehaviour {
 
     }
 
+    void Disparar()
+    {
+        if (imanes.Count > 0)
+        {
+            Rigidbody2D rbImanes = imanes[imanes.Count - 1].GetComponent<Rigidbody2D>();
+            imanes[imanes.Count - 1].transform.parent = null;
+            rbImanes.simulated = true;
+            rbImanes.velocity = Vector2.right * fuerza;
+            imanes.Remove(imanes[imanes.Count - 1]);
+
+            textoImanes.text = imanes.Count.ToString();
+        }
+    }
 
 }
 
